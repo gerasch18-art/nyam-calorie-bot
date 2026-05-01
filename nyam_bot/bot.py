@@ -258,8 +258,15 @@ def main():
     async def handle(request):
         return web.Response(text="Bot is running!")
     
+    async def start_bot():
+        await dp.start_polling(bot, skip_updates=True)
+    
+    async def on_startup(app):
+        asyncio.create_task(start_bot())
+    
     app = web.Application()
     app.router.add_get("/", handle)
+    app.on_startup.append(on_startup)
     
     runner = web.AppRunner(app)
     asyncio.run(runner.setup())
@@ -268,7 +275,7 @@ def main():
     site = web.TCPSite(runner, "0.0.0.0", port)
     site.start()
     
-    logger.info(f"Starting NyamNyamchik Bot on port {port}...")
+    logger.info(f"NyamNyamchik Bot starting on port {port}...")
     asyncio.get_event_loop().run_forever()
 
 
