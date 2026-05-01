@@ -1,15 +1,13 @@
 import logging
 import os
 import asyncio
-from aiohttp import web
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Dict
 from collections import defaultdict
 
 from aiogram import Bot, Dispatcher, types, Router
 from aiogram.filters import Command
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, FSInputFile, Message
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from aiogram.filters import Filter
 
 from .config import TELEGRAM_BOT_TOKEN, FREE_DAILY_LIMIT, PRO_DAILY_LIMIT
@@ -195,7 +193,7 @@ async def handle_photo(message: types.Message):
         
     except Exception as e:
         logger.exception(e)
-        await message.answer(f"���️ ��шибка: {str(e)[:200]}")
+        await message.answer(f"⚠️ Ошибка: {str(e)[:200]}")
     
     try:
         await bot.delete_message(chat_id=message.chat.id, message_id=processing.message_id)
@@ -252,31 +250,14 @@ async def handle_text(message: types.Message):
     )
 
 
+async def run_telegram_bot():
+    logger.info("Starting Telegram bot polling...")
+    await dp.start_polling(bot, check_updates=True)
+
+
 def main():
-    from aiohttp import web
-    
-    async def handle(request):
-        return web.Response(text="Bot is running!")
-    
-    async def start_bot():
-        await dp.start_polling(bot, skip_updates=True)
-    
-    async def on_startup(app):
-        asyncio.create_task(start_bot())
-    
-    app = web.Application()
-    app.router.add_get("/", handle)
-    app.on_startup.append(on_startup)
-    
-    runner = web.AppRunner(app)
-    asyncio.run(runner.setup())
-    
-    port = int(os.getenv("PORT", 8080))
-    site = web.TCPSite(runner, "0.0.0.0", port)
-    site.start()
-    
-    logger.info(f"NyamNyamchik Bot starting on port {port}...")
-    asyncio.get_event_loop().run_forever()
+    logger.info("Starting NyamNyamchik Bot...")
+    asyncio.run(run_telegram_bot())
 
 
 if __name__ == "__main__":
