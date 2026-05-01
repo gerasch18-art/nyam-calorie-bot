@@ -77,25 +77,25 @@ def format_food_response(data: dict) -> str:
 
 
 def build_main_keyboard() -> InlineKeyboardMarkup:
-    kb = InlineKeyboardMarkup(row_width=2)
-    kb.add(
-        InlineKeyboardButton("📸 Анализировать", callback_data="action|analyze"),
-        InlineKeyboardButton("📊 История", callback_data="action|history"),
-    )
-    kb.add(
-        InlineKeyboardButton("⚙️ Настройки", callback_data="action|settings"),
-        InlineKeyboardButton("❓ Помощь", callback_data="action|help"),
-    )
-    return kb
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="📸 Анализировать", callback_data="action|analyze"),
+            InlineKeyboardButton(text="📊 История", callback_data="action|history"),
+        ],
+        [
+            InlineKeyboardButton(text="⚙️ Настройки", callback_data="action|settings"),
+            InlineKeyboardButton(text="❓ Помощь", callback_data="action|help"),
+        ]
+    ])
 
 
 def build_correct_keyboard() -> InlineKeyboardMarkup:
-    kb = InlineKeyboardMarkup(row_width=2)
-    kb.add(
-        InlineKeyboardButton("✏️ Исправить", callback_data="action|correct"),
-        InlineKeyboardButton("🔄 Ещё фото", callback_data="action|retry"),
-    )
-    return kb
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="✏️ Исправить", callback_data="action|correct"),
+            InlineKeyboardButton(text="🔄 Ещё фото", callback_data="action|retry"),
+        ]
+    ])
 
 
 @router.message(Command("start"))
