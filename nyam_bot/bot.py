@@ -264,10 +264,11 @@ def main():
     runner = web.AppRunner(app)
     asyncio.run(runner.setup())
     
-    site = web.TCPSite(runner, "0.0.0.0", int(os.getenv("PORT", 8080)))
+    port = int(os.getenv("PORT", 8080))
+    site = web.TCPSite(runner, "0.0.0.0", port)
     site.start()
     
-    logger.info("Starting NyamNyamchik Bot on web...")
+    logger.info(f"Starting NyamNyamchik Bot on port {port}...")
     asyncio.get_event_loop().run_forever()
 
 
